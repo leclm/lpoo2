@@ -21,6 +21,12 @@ public class ContaInvestimento extends Conta{
         this.setMontanteMinimo(montante);
     }
     
+    public ContaInvestimento(int numero, Cliente dono, double valor, double deposito, double montante) {
+        super(numero, dono, valor, 2);
+        this.setDepositoMinimo(deposito);
+        this.setMontanteMinimo(montante);
+    }
+    
     
     /*
     *** SETTERS

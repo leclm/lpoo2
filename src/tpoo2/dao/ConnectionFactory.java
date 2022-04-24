@@ -11,7 +11,7 @@ public class ConnectionFactory {
     
     private static final String host = "jdbc:mysql://localhost/tpoo2?useSSL=false";
     private static final String user = "root";
-    private static final String pwd = "Tuti19";
+    private static final String pwd = "";
     
     public static Connection getConnection() throws SQLException{
         return DriverManager.getConnection(host, user, pwd);

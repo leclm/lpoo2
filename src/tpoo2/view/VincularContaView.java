@@ -1,7 +1,35 @@
 package tpoo2.view;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JFrame;
+import tpoo2.controller.ClienteController;
+import tpoo2.controller.VincularContaController;
+import tpoo2.model.Cliente;
+import tpoo2.model.ContaCorrente;
+import tpoo2.model.ContaInvestimento;
+
 public class VincularContaView extends javax.swing.JFrame {
     private final ModeloTabelaCliente modelo = new ModeloTabelaCliente();
+    
+    private final ModeloTabelaContaCorrente modeloContaCorrente = new ModeloTabelaContaCorrente();
+    private final ModeloTabelaContaInvestimento modeloContaInvestimento = new ModeloTabelaContaInvestimento();
+    
+    
+    private int linhaClicadaVincularConta = -1;
+    
+    private int numeroContadorCorrente = 1;
+    private int numeroContadorInvestimento = 1;
+    
+    private final List<ContaCorrente> listaDeContasCorrente = new ArrayList();
+    private final List<ContaInvestimento> listaDeContasInvestimento = new ArrayList();
+    
+    JFrame jFrame = new JFrame();
+    /**
+     * Creates new form NovoJFrame2
+     */
     
     /*
     *** CONSTRUTOR
@@ -10,7 +38,7 @@ public class VincularContaView extends javax.swing.JFrame {
         initComponents();
         tabelaVincularConta.setModel(modelo);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -157,6 +185,211 @@ public class VincularContaView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /*
+    *** CONTROLLER
+    */
+    public void setController(VincularContaController controller) {
+        incluirConta.addActionListener(e -> controller.InsertConta());
+    }
+    
+    
+    /*
+    *** INIT
+    */
+    public void initView() {
+        java.awt.EventQueue.invokeLater(() -> this.setVisible(true));
+    }
+    
+    private void esconderComponentesVincularConta() {
+        selecioneTipoConta.setVisible(false);
+        cbContas.setVisible(false);
+        
+        label1VincularConta.setText("");
+        label2VincularConta.setText("");
+        label3VincularConta.setText("");
+        
+        tLabel1VincularConta.setText("");
+        tLabel2VincularConta.setText("");
+        tLabel3VincularConta.setText("");
+        
+        tLabel1VincularConta.setVisible(false);
+        tLabel2VincularConta.setVisible(false);
+        tLabel3VincularConta.setVisible(false);
+        
+        incluirConta.setVisible(false);
+    }
+    
+    private void tabVincularContaComponentShown(java.awt.event.ComponentEvent evt) {                                                
+        tabelaVincularConta.setModel(modelo);
+        List<Cliente> listaDeClientes = modelo.getClientes();
+        Collections.sort(listaDeClientes, (o1, o2) -> Integer.toString(o1.getId()).compareTo(Integer.toString(o2.getId())));
+        modelo.atualizarTabela(listaDeClientes);
+        
+        esconderComponentesVincularConta();
+    } 
+    
+    private void tabelaVincularContaMouseClicked(java.awt.event.MouseEvent evt) {                                                 
+        //Pega a linha clicada
+        linhaClicadaVincularConta = tabelaVincularConta.rowAtPoint(evt.getPoint());
+        
+        //Pega o cliente da linha clicada
+        Cliente cliente = modelo.getCliente(linhaClicadaVincularConta);
+        
+        
+        int verificarContaCorrente = 0;
+        for (ContaCorrente conta: listaDeContasCorrente){
+            if (conta.getDono() == cliente) {
+                verificarContaCorrente = 1;
+                break;
+            }
+        }
+        
+        int verificarContaInvestimento = 0;
+        if (verificarContaCorrente == 0) {
+            for (ContaInvestimento conta: listaDeContasInvestimento){
+                if (conta.getDono() == cliente) {
+                    verificarContaInvestimento = 1;
+                    break;
+                }
+            }
+        }
+        
+        cbContas.removeAllItems();
+        cbContas.addItem("Selecione");
+        
+        if (verificarContaCorrente == 1) {
+            cbContas.addItem("Conta Corrente");
+        } else if (verificarContaInvestimento == 1) {
+            cbContas.addItem("Conta Investimento");
+        } else {
+            cbContas.addItem("Conta Corrente");
+            cbContas.addItem("Conta Investimento");
+        }
+        
+        selecioneTipoConta.setVisible(true);
+        cbContas.setVisible(true);
+        tabVincularConta.revalidate();
+        tabVincularConta.repaint();
+    }    
+     
+    private void cbContasItemStateChanged(java.awt.event.ItemEvent evt) {                                          
+        //Pega qual tipo de conta foi escolhida
+        if (cbContas.getSelectedItem() != null) {
+            String comboConta = cbContas.getSelectedItem().toString();
+        
+            switch (comboConta) {
+                case "Conta Corrente":
+                    label1VincularConta.setText("Depósito inicial (valor em R$):");
+                    label2VincularConta.setText("Limite da conta (valor em R$):");
+                    label3VincularConta.setText("");
+
+                    tLabel1VincularConta.setVisible(true);
+                    tLabel2VincularConta.setVisible(true);
+                    tLabel3VincularConta.setVisible(false);
+                    
+                    incluirConta.setVisible(true);
+
+                    break;
+                case "Conta Investimento":
+                    label1VincularConta.setText("Montante Mínimo (valor em R$):");
+                    label2VincularConta.setText("Depósito Mínimo (valor em R$):");
+                    label3VincularConta.setText("Depósito Inicial (valor em R$):");
+
+                    tLabel1VincularConta.setVisible(true);
+                    tLabel2VincularConta.setVisible(true);
+                    tLabel3VincularConta.setVisible(true);
+                    
+                    incluirConta.setVisible(true);
+
+                    break;
+            }
+            
+            tabVincularConta.revalidate();
+            tabVincularConta.repaint();
+        }
+    }                                         
+
+    private void incluirContaMouseClicked(java.awt.event.MouseEvent evt) {                                          
+        //Pega o cliente da linha clicada
+        Cliente cliente = modelo.getCliente(linhaClicadaVincularConta);
+
+        //Pega qual tipo de conta foi escolhida
+        String comboConta = cbContas.getSelectedItem().toString();
+
+        switch (comboConta) {
+            case "Conta Corrente":
+                try {
+                    if (!"".equals(tLabel1VincularConta.getText()) && !"".equals(tLabel2VincularConta.getText())) {
+                        int numero = numeroContadorCorrente;
+                        double valor = Double.parseDouble(tLabel1VincularConta.getText());
+                        Cliente dono = cliente;
+                        double limiteDaConta = Double.parseDouble(tLabel2VincularConta.getText());
+
+                        ContaCorrente conta = new ContaCorrente(numero, dono, valor, limiteDaConta);
+                        listaDeContasCorrente.add(conta);
+                        modeloContaCorrente.adicionaContaCorrente(conta);
+                        numeroContadorCorrente++;
+                        
+                        JOptionPane.showMessageDialog(jFrame, "Conta vinculada com sucesso!", 
+                            "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        
+                        esconderComponentesVincularConta();
+                    } else {
+                        JOptionPane.showMessageDialog(jFrame, "Os campos não podem ficar vazios!", 
+                            "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch(NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(jFrame, "Os valores nos campos devem ser numéricos!", 
+                            "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                
+                break;
+            case "Conta Investimento":
+                try {
+                    if (!"".equals(tLabel1VincularConta.getText()) && 
+                        !"".equals(tLabel2VincularConta.getText()) && 
+                        !"".equals(tLabel3VincularConta.getText())) {
+                        
+                        int numero = numeroContadorInvestimento;
+                        double valor = Double.parseDouble(tLabel3VincularConta.getText());
+                        Cliente dono = cliente;
+                        double depositoMinimo = Double.parseDouble(tLabel2VincularConta.getText());
+                        double montanteMinimo = Double.parseDouble(tLabel1VincularConta.getText());
+                        
+                        if (valor >= montanteMinimo && valor >= depositoMinimo) {
+                            
+                            ContaInvestimento conta = new ContaInvestimento(numero, dono, valor, depositoMinimo, montanteMinimo);
+                            listaDeContasInvestimento.add(conta);
+                            modeloContaInvestimento.adicionaContaInvestimento(conta);
+                            numeroContadorInvestimento++;
+
+                            JOptionPane.showMessageDialog(jFrame, "Conta vinculada com sucesso!", 
+                                "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                            
+                            esconderComponentesVincularConta();
+                        } else {
+                            JOptionPane.showMessageDialog(jFrame, "O depósito inicial não pode ser menor que o montante mínimo"
+                                    + " ou que o depósito mínimo", "Erro", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(jFrame, "Os campos não podem ficar vazios!", 
+                            "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch(NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(jFrame, "Os valores nos campos devem ser numéricos!", 
+                            "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                
+                break;
+        }
+    }    
+     
+     
+     
+     
+     
+     
+     
     /**
      * @param args the command line arguments
      */
