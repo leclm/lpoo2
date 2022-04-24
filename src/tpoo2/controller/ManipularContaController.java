@@ -35,7 +35,7 @@ public class ManipularContaController {
         try {
             double valor = 0;
             conta.saca(valor);
-            manipularContaView.SacaMouseClicked();
+            /*  manipularContaView.SacaMouseClicked();*/
             
         } catch(Exception ex) {
             JFrame jFrame = new JFrame();
@@ -53,8 +53,8 @@ public class ManipularContaController {
     */
     public void Deposita() {
           try {
-              conta.deposita();
-              manipularContaView.DepositaMouseClicked();
+              /*conta.deposita();
+              manipularContaView.DepositaMouseClicked(); */
 
           } catch(Exception ex) {
               JFrame jFrame = new JFrame();
@@ -90,7 +90,7 @@ public class ManipularContaController {
     public void Remunera() {
           try {
               conta.remunera();
-              manipularContaView.RemuneraMouseClicked();
+              /* manipularContaView.RemuneraMouseClicked();*/
 
           } catch(Exception ex) {
               JFrame jFrame = new JFrame();

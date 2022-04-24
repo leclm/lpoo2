@@ -15,10 +15,14 @@ public class ManipularContaView extends javax.swing.JFrame {
     private final List<ContaCorrente> listaManipulaContaCorrente = new ArrayList();
     private final ModeloTabelaContaInvestimento modeloContaInvestimento = new ModeloTabelaContaInvestimento();
     private final List<ContaInvestimento> listaManipulaContaInvestimento = new ArrayList();
+    private final ModeloTabelaCliente modeloVincularConta = new ModeloTabelaCliente();
+
 
 
 
     private int linhaClicada = -1;
+    private int linhaClicadaVincularConta = -1;
+
     
      JFrame jFrame = new JFrame();
     
@@ -226,16 +230,16 @@ public class ManipularContaView extends javax.swing.JFrame {
     *** CONTROLLER
     */
     public void setController(ManipularContaController controller) {
-        saca.addActionListener(e -> controller.saca());
-        deposita.addActionListener(e -> controller.deposita());
-        veSaldo.addActionListener(e -> controller.veSaldo());
-        remunera.addActionListener(e -> controller.remunera());
+        Sacar.addActionListener(e -> controller.saca());
+        Depositar.addActionListener(e -> controller.deposita());
+        VerSaldo.addActionListener(e -> controller.veSaldo());
+        Remunerar.addActionListener(e -> controller.remunera());
     }
     
       /*
     *** SACAR
     */
-    private void SacaMouseClicked(java.awt.event.MouseEvent evt) {
+    public void SacaMouseClicked(java.awt.event.MouseEvent evt) {
         saldoAtual.setVisible(false);
         verSaldo.setVisible(false);
         
@@ -273,7 +277,7 @@ public class ManipularContaView extends javax.swing.JFrame {
      /*
     *** DEPOSITAR
     */
-      private void DepositaMouseClicked(java.awt.event.MouseEvent evt) {
+    public void DepositaMouseClicked(java.awt.event.MouseEvent evt) {
         saldoAtual.setVisible(false);
         verSaldo.setVisible(false);
         
@@ -312,7 +316,7 @@ public class ManipularContaView extends javax.swing.JFrame {
      /*
     *** VER SALDO
     */
-    private void VeSaldoMouseClicked(java.awt.event.MouseEvent evt) {
+    public void VeSaldoMouseClicked(java.awt.event.MouseEvent evt) {
         saldoAtual.setVisible(true);
         verSaldo.setVisible(true);
         
@@ -335,7 +339,7 @@ public class ManipularContaView extends javax.swing.JFrame {
     *** REMUNERAR
     */
     
-     private void RemuneraMouseClicked(java.awt.event.MouseEvent evt) {
+    public void RemuneraMouseClicked(java.awt.event.MouseEvent evt) {
         saldoAtual.setVisible(false);
         verSaldo.setVisible(false);
         

@@ -4,9 +4,15 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/katia/Desktop/TRABALHO%20LPOO%20KATIANA,%20LETICIA,%20LUIS/lpoo2/src/tpoo2/view/ManipularContaView.java</file>
+            <file>file:/C:/Users/katia/Desktop/TRABALHO%20LPOO%20KATIANA,%20LETICIA,%20LUIS/lpoo2/src/tpoo2/model/sql.sql</file>
+            <file>file:/C:/Users/katia/Desktop/TRABALHO%20LPOO%20KATIANA,%20LETICIA,%20LUIS/lpoo2/src/tpoo2/view/VincularContaView.java</file>
             <file>file:/C:/Users/katia/Desktop/TRABALHO%20LPOO%20KATIANA,%20LETICIA,%20LUIS/lpoo2/src/tpoo2/controller/VincularContaController.java</file>
             <file>file:/C:/Users/katia/Desktop/TRABALHO%20LPOO%20KATIANA,%20LETICIA,%20LUIS/lpoo2/src/tpoo2/controller/ClienteController.java</file>
+            <file>file:/C:/Users/katia/Desktop/TRABALHO%20LPOO%20KATIANA,%20LETICIA,%20LUIS/lpoo2/src/tpoo2/dao/ConnectionFactory.java</file>
+            <file>file:/C:/Users/katia/Desktop/TRABALHO%20LPOO%20KATIANA,%20LETICIA,%20LUIS/lpoo2/src/tpoo2/dao/ContaDao.java</file>
+            <file>file:/C:/Users/katia/Desktop/TRABALHO%20LPOO%20KATIANA,%20LETICIA,%20LUIS/lpoo2/src/tpoo2/controller/ManipularContaController.java</file>
             <file>file:/C:/Users/katia/Desktop/TRABALHO%20LPOO%20KATIANA,%20LETICIA,%20LUIS/lpoo2/src/tpoo2/view/CadastrarClienteView.java</file>
+            <file>file:/C:/Users/katia/Desktop/TRABALHO%20LPOO%20KATIANA,%20LETICIA,%20LUIS/lpoo2/src/tpoo2/dao/ClienteDao.java</file>
         </group>
     </open-files>
 </project-private>
