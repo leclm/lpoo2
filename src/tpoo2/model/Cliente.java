@@ -33,17 +33,7 @@ public final class Cliente implements Comparable {
     *** ID
     */
     public void setId(int id){
-        if (id > 0) {
-            this.id = id;
-            
-        } else {
-            JFrame jFrame = new JFrame();
-            JOptionPane.showMessageDialog(jFrame, "Id inválido!\n"
-                    + "O ID não pode ser menor ou igual a zero.", 
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-            
-            throw new RuntimeException();
-        }
+        this.id = id;
     }
     
     public int getId(){ return this.id; }

@@ -8,15 +8,15 @@ import tpoo2.model.Cliente;
 import tpoo2.view.CadastrarClienteView;
 
 public class ClienteController {
-    private CadastrarClienteView cadastrarClienteView;
+    private CadastrarClienteView view;
     private ClienteDao clienteDao;
     
     
     /*
     *** CONSTRUTOR
     */
-    public ClienteController(CadastrarClienteView cadastrarClienteView, ClienteDao clienteDao) {
-        this.cadastrarClienteView = cadastrarClienteView;
+    public ClienteController(CadastrarClienteView view, ClienteDao clienteDao) {
+        this.view = view;
         this.clienteDao = clienteDao;
         initController();
     }
@@ -26,8 +26,8 @@ public class ClienteController {
     *** INIT
     */
     private void initController(){
-        this.cadastrarClienteView.setController(this);
-        this.cadastrarClienteView.initView();
+        this.view.setController(this);
+        this.view.initView();
     }
     
     
@@ -36,13 +36,14 @@ public class ClienteController {
     */
     public void InsertCliente() {
         try {
-            Cliente cliente = cadastrarClienteView.getClienteFormulario();
+            Cliente cliente = view.getClienteFormulario();
             clienteDao.insertCliente(cliente);
-            cadastrarClienteView.inserirClienteView(cliente);
+            view.inserirClienteView(cliente);
             
         } catch(Exception ex) {
             JFrame jFrame = new JFrame();
-            JOptionPane.showMessageDialog(jFrame, "Erro ao criar cliente.",
+            JOptionPane.showMessageDialog(jFrame, "Erro ao criar cliente.\n"
+                    + ex.getMessage(),
                     "Erro", JOptionPane.ERROR_MESSAGE);
             
             throw new RuntimeException();
@@ -55,9 +56,9 @@ public class ClienteController {
     */
     public void DeleteCliente() {
         try {
-            List<Cliente> listaParaExcluir = cadastrarClienteView.getClientesParaExcluir();
+            List<Cliente> listaParaExcluir = view.getClientesParaExcluir();
             clienteDao.deleteLista(listaParaExcluir);
-            cadastrarClienteView.excluirClienteView(listaParaExcluir);
+            view.excluirClienteView(listaParaExcluir);
             
         } catch(Exception ex){
             JFrame jFrame = new JFrame();
@@ -74,7 +75,7 @@ public class ClienteController {
     */
     public void UpdateCliente() {
         try {
-            Cliente cliente = cadastrarClienteView.getClienteParaAtualizar();
+            Cliente cliente = view.getClienteParaAtualizar();
             
             if(cliente == null) {
                 JFrame jFrame = new JFrame();
@@ -85,7 +86,7 @@ public class ClienteController {
             }
             
             clienteDao.updateCliente(cliente);
-            cadastrarClienteView.alterarClienteView(cliente);
+            view.alterarClienteView(cliente);
             
         } catch(Exception ex) {
             JFrame jFrame = new JFrame();
