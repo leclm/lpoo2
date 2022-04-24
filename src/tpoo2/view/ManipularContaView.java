@@ -2,20 +2,30 @@ package tpoo2.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import tpoo2.controller.ClienteController;
 import tpoo2.controller.ManipularContaController;
+import tpoo2.model.Cliente;
 import tpoo2.model.ContaCorrente;
 import tpoo2.model.ContaInvestimento;
 
 public class ManipularContaView extends javax.swing.JFrame {
     private final ModeloTabelaConta modelo = new ModeloTabelaConta();
     private final ModeloTabelaContaCorrente modeloContaCorrente = new ModeloTabelaContaCorrente();
-    private final List<ContaCorrente> listaManipulaContaCorrente = new ArrayList();
     private final ModeloTabelaContaInvestimento modeloContaInvestimento = new ModeloTabelaContaInvestimento();
-    private final List<ContaInvestimento> listaManipulaContaInvestimento = new ArrayList();
     private final ModeloTabelaCliente modeloVincularConta = new ModeloTabelaCliente();
+    
+    
+    private final List<ContaInvestimento> listaManipulaContaInvestimento = new ArrayList();
+    private final List<ContaCorrente> listaManipulaContaCorrente = new ArrayList();
+    private final List<Cliente> listaDeClientes = new ArrayList();
+    private final List<ContaCorrente> listaDeContasCorrente = new ArrayList();    
+    private final List<ContaInvestimento> listaDeContasInvestimento = new ArrayList();
+
+
+
 
 
 
@@ -236,10 +246,103 @@ public class ManipularContaView extends javax.swing.JFrame {
         Remunerar.addActionListener(e -> controller.remunera());
     }
     
+    private void visualizarComponentesManipularConta(boolean visibilidade) {
+        saque.setVisible(visibilidade);
+        tSaque.setVisible(visibilidade);
+        tSaque.setText("");
+        Sacar.setVisible(visibilidade);
+        
+        deposito.setVisible(visibilidade);
+        tDeposito.setVisible(visibilidade);
+        tDeposito.setText("");
+        Depositar.setVisible(visibilidade);
+        
+        VerSaldo.setVisible(visibilidade);
+        Remunerar.setVisible(visibilidade);
+    }
+    
+    private void tabManipularContaComponentShown(java.awt.event.ComponentEvent evt) {
+        visualizarComponentesManipularConta(false);
+        tabelaManipularConta.setVisible(false);
+        saldoAtual.setVisible(false);
+        verSaldo.setVisible(false);
+    }
+    
+     private void InformarMouseClicked(java.awt.event.MouseEvent evt) {
+        try {
+            Long cpf = Long.parseLong(tInformarCPF.getText());
+            
+            if (cpf >= 0) {
+                listaManipulaContaCorrente.clear();
+                listaManipulaContaInvestimento.clear();
+                
+                int verificar = 0;
+                for (Cliente cliente: listaDeClientes){
+                    if (Objects.equals(cliente.getCPF(), cpf)) {
+                        int verificarContaCorrente = 0;
+                        for (ContaCorrente conta: listaDeContasCorrente){
+                            if (conta.getDono() == cliente) {
+                                listaManipulaContaCorrente.add(conta);
+                                verificarContaCorrente++;
+                            }
+                        }
+
+                        if (verificarContaCorrente == 0) {
+                            for (ContaInvestimento conta: listaDeContasInvestimento){
+                                if (conta.getDono() == cliente) {
+                                    listaManipulaContaInvestimento.add(conta);
+                                }
+                            }
+                        }
+                        
+                        verificar = 1;
+                        break;
+                    }
+                }
+                
+                if (verificar == 1) {
+                    if (listaManipulaContaCorrente.size() > 0) {
+                        tabelaManipularConta.setVisible(true);
+                        tabelaManipularConta.setModel(modeloContaCorrente);
+                        modeloContaCorrente.atualizarTabela(listaManipulaContaCorrente);
+                    } else if (listaManipulaContaInvestimento.size() > 0) {
+                        tabelaManipularConta.setVisible(true);
+                        tabelaManipularConta.setModel(modeloContaInvestimento);
+                        modeloContaInvestimento.atualizarTabela(listaManipulaContaInvestimento);
+                    } else {
+                        JOptionPane.showMessageDialog(jFrame, "O cliente informado não possui nenhuma conta!", 
+                            "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(jFrame, "CPF não encontrado na lista de clientes!", 
+                            "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(jFrame, "O CPF deve ser positivo!", 
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch(NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(jFrame, "O CPF deve ser numérico!", 
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+        }  
+        
+        visualizarComponentesManipularConta(false);
+        saldoAtual.setVisible(false);
+        verSaldo.setVisible(false);
+    }
+    
+     private void tabelaManipularContaMouseClicked(java.awt.event.MouseEvent evt) {
+        //Pega a linha clicada
+        linhaClicada = tabelaManipularConta.rowAtPoint(evt.getPoint());
+        visualizarComponentesManipularConta(true);
+    }
+    
+    
+    
       /*
     *** SACAR
     */
-    public void SacaMouseClicked(java.awt.event.MouseEvent evt) {
+    public void SacarMouseClicked(java.awt.event.MouseEvent evt) {
         saldoAtual.setVisible(false);
         verSaldo.setVisible(false);
         
@@ -277,7 +380,7 @@ public class ManipularContaView extends javax.swing.JFrame {
      /*
     *** DEPOSITAR
     */
-    public void DepositaMouseClicked(java.awt.event.MouseEvent evt) {
+    public void DepositarMouseClicked(java.awt.event.MouseEvent evt) {
         saldoAtual.setVisible(false);
         verSaldo.setVisible(false);
         
@@ -316,7 +419,7 @@ public class ManipularContaView extends javax.swing.JFrame {
      /*
     *** VER SALDO
     */
-    public void VeSaldoMouseClicked(java.awt.event.MouseEvent evt) {
+    public void VerSaldoMouseClicked(java.awt.event.MouseEvent evt) {
         saldoAtual.setVisible(true);
         verSaldo.setVisible(true);
         
@@ -339,7 +442,7 @@ public class ManipularContaView extends javax.swing.JFrame {
     *** REMUNERAR
     */
     
-    public void RemuneraMouseClicked(java.awt.event.MouseEvent evt) {
+    public void RemunerarMouseClicked(java.awt.event.MouseEvent evt) {
         saldoAtual.setVisible(false);
         verSaldo.setVisible(false);
         
