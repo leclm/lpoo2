@@ -35,12 +35,12 @@ public class VincularContaController {
     *** INSERT
     */
     public void InsertConta() {
-        try {
+        /*try {
             Conta conta = vincularContaView.tabVincularContaComponentShown();
             
             
             tabelaVincularContaMouseClicked();
-            cbContasItemStateChanged():
+            cbContasItemStateChanged();
             incluirContaMouseClicked();
             
             
@@ -53,7 +53,7 @@ public class VincularContaController {
                     "Erro", JOptionPane.ERROR_MESSAGE);
             
             throw new RuntimeException();
-        }
+        }*/
     }
     
 }
