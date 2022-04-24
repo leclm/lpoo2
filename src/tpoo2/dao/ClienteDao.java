@@ -22,7 +22,7 @@ public class ClienteDao {
     /*
     *** JDBC CONNECTION
     */
-    private static Connection con;
+    private static ConnectionFactory connectionFactory;
     private static PreparedStatement st;
     private static ResultSet rs;
 
@@ -57,32 +57,31 @@ public class ClienteDao {
     /*
     *** INSERT
     */
-    public static Cliente insertCliente(Cliente c) throws SQLException{
+    public static void insertCliente(Cliente c) throws SQLException{
+        Connection con = connectionFactory.getConnection();
+        
         try {
-            con = ConnectionFactory.getConnection();
-
+            // prepared statement para inserção
             st = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
+            // seta os valores
             st.setString(1, c.getCPF());
             st.setString(2, c.getNome());
             st.setString(3, c.getSobrenome());
             st.setString(4, c.getRG());
             st.setDouble(5, c.getSalario());
             st.setString(6, c.getEndereco());
-
-            if (st.executeUpdate() == 0) return null;
-
-            rs = st.getGeneratedKeys();
-            if(rs.next()) {
-                c.setId(rs.getInt(1));
-                return c;
-            } else {
-                return null;
-            }
+            // executa
+            st.execute();
+            //Seta o id do cliente
+            ResultSet rs = st.getGeneratedKeys();
+            rs.next();
+            int i = rs.getInt(1);
+            c.setId(i);
             
         } catch(Exception ex) {
-            return null;
+            throw new RuntimeException(ex);
             
-        } finally { 
+        } finally {
             ConnectionFactory.close(con, st, rs); 
         }
     }
@@ -91,11 +90,10 @@ public class ClienteDao {
     /*
     *** UPDATE
     */
-    public static boolean updateCliente(Cliente c) throws SQLException{
+    public static void updateCliente(Cliente c) throws SQLException{
+        Connection con = connectionFactory.getConnection();
+        st = con.prepareStatement(SQL_UPDATE);
         try {
-            con = ConnectionFactory.getConnection();
-
-            st = con.prepareCall(SQL_UPDATE);
             st.setString(1, c.getCPF());
             st.setString(2, c.getNome());
             st.setString(3, c.getSobrenome());
@@ -103,14 +101,10 @@ public class ClienteDao {
             st.setDouble(5, c.getSalario());
             st.setString(6, c.getEndereco());
             st.setInt(7, c.getId());
-
-            return st.executeUpdate() != 0;
             
-        } catch(Exception ex) {
-            return false;
-            
-        } finally { 
-            ConnectionFactory.close(con, st, rs); 
+            st.executeUpdate();
+        } finally{
+            st.close();
         }
     }
 
@@ -119,14 +113,14 @@ public class ClienteDao {
     *** DELETE
     */
     public static boolean deleteClienteById(int id) throws SQLException{
+        Connection con = connectionFactory.getConnection();
+        
         try {
             Cliente c = ClienteDao.getClienteById(id);
             List<Conta> contasCliente = ContaDao.getContasByCpf(c.getCPF());
             
             for (int i = 0; i< contasCliente.size(); i++)
                 ContaDao.deleteConta(contasCliente.get(i).getNumero());
-            
-            con = ConnectionFactory.getConnection();
             
             st = con.prepareStatement(SQL_DELETE);
             st.setInt(1, id);
@@ -148,7 +142,7 @@ public class ClienteDao {
     }
 
     public void deleteCliente(Cliente cliente) throws SQLException {
-        con = ConnectionFactory.getConnection();
+        Connection con = connectionFactory.getConnection();
         PreparedStatement stmtExcluir;
         stmtExcluir = con.prepareStatement(SQL_DELETE);
         
@@ -166,9 +160,10 @@ public class ClienteDao {
     *** LISTAR CLIENTES
     */
     public static List<Cliente> listClientes() throws SQLException{
+        Connection con = connectionFactory.getConnection();
+        
         try {
             List<Cliente> lista = new ArrayList();
-            con = ConnectionFactory.getConnection();
             
             rs = con.prepareStatement(SQL_LIST).executeQuery();
             while(rs.next()) {
@@ -200,9 +195,9 @@ public class ClienteDao {
     *** PROCURAR CLIENTE
     */
     public static Cliente getClienteById(int id) throws SQLException{
+        Connection con = connectionFactory.getConnection();
+        
         try {
-            con = ConnectionFactory.getConnection();
-
             st = con.prepareStatement(SQL_GET_BY_ID);
             st.setInt(1, id);
 
@@ -231,9 +226,9 @@ public class ClienteDao {
     }
     
     public static Cliente getClienteByCpf(String cpf) throws SQLException{
+        Connection con = connectionFactory.getConnection();
+        
         try {
-            con = ConnectionFactory.getConnection();
-
             st = con.prepareStatement(SQL_GET_BY_CPF);
             st.setString(1, cpf);
 
@@ -266,9 +261,9 @@ public class ClienteDao {
     *** VERIFICAR DISPONIBILIDADE DO CPF
     */
     public static boolean isCpfAvailable(String cpf) throws SQLException{
+        Connection con = connectionFactory.getConnection();
+        
         try {
-            con = ConnectionFactory.getConnection();
-            
             st = con.prepareStatement(SQL_IS_CPF_AVAILABLE);
             st.setString(1, cpf);
             
@@ -289,9 +284,9 @@ public class ClienteDao {
     }
     
     public static boolean isCpfAvailable(String cpf, int id) throws SQLException{
+        Connection con = connectionFactory.getConnection();
+        
         try {
-            con = ConnectionFactory.getConnection();
-            
             st = con.prepareStatement(SQL_IS_CPF_AVAILABLE + " AND id != ?");
             st.setString(1, cpf);
             st.setInt(2, id);
@@ -317,9 +312,9 @@ public class ClienteDao {
     *** VERIFICAR DISPONIBILIDADE DO RG
     */
     public static boolean isRgAvailable(String rg) throws SQLException{
+        Connection con = connectionFactory.getConnection();
+        
         try {
-            con = ConnectionFactory.getConnection();
-            
             st = con.prepareStatement(SQL_IS_RG_AVAILABLE);
             st.setString(1, rg);
             
@@ -340,9 +335,9 @@ public class ClienteDao {
     }
     
     public static boolean isRgAvailable(String rg, int id) throws SQLException{
+        Connection con = connectionFactory.getConnection();
+        
         try {
-            con = ConnectionFactory.getConnection();
-            
             st = con.prepareStatement(SQL_IS_RG_AVAILABLE + " AND id != ?");
             st.setString(1, rg);
             st.setInt(2, id);
