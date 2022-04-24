@@ -1,7 +1,26 @@
 package tpoo2.view;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import tpoo2.controller.ClienteController;
+import tpoo2.controller.ManipularContaController;
+import tpoo2.model.ContaCorrente;
+import tpoo2.model.ContaInvestimento;
+
 public class ManipularContaView extends javax.swing.JFrame {
     private final ModeloTabelaConta modelo = new ModeloTabelaConta();
+    private final ModeloTabelaContaCorrente modeloContaCorrente = new ModeloTabelaContaCorrente();
+    private final List<ContaCorrente> listaManipulaContaCorrente = new ArrayList();
+    private final ModeloTabelaContaInvestimento modeloContaInvestimento = new ModeloTabelaContaInvestimento();
+    private final List<ContaInvestimento> listaManipulaContaInvestimento = new ArrayList();
+
+
+
+    private int linhaClicada = -1;
+    
+     JFrame jFrame = new JFrame();
     
     /*
     *** CONSTRUTOR
@@ -194,6 +213,149 @@ public class ManipularContaView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+     /*
+    *** INIT
+    */
+    public void initView() {
+        java.awt.EventQueue.invokeLater(() -> this.setVisible(true));
+    }
+    
+    
+     /*
+    *** CONTROLLER
+    */
+    public void setController(ManipularContaController controller) {
+        saca.addActionListener(e -> controller.saca());
+        deposita.addActionListener(e -> controller.deposita());
+        veSaldo.addActionListener(e -> controller.veSaldo());
+        remunera.addActionListener(e -> controller.remunera());
+    }
+    
+      /*
+    *** SACAR
+    */
+    private void SacaMouseClicked(java.awt.event.MouseEvent evt) {
+        saldoAtual.setVisible(false);
+        verSaldo.setVisible(false);
+        
+        try {
+            double saque = Double.parseDouble(tSaque.getText());
+            boolean resultadoSaque;
+            
+            if (tabelaManipularConta.getModel() == modeloContaCorrente) {
+                ContaCorrente conta = modeloContaCorrente.getContaCorrente(linhaClicada);
+                resultadoSaque = conta.saca(saque);
+                
+                if (resultadoSaque) {
+                    JOptionPane.showMessageDialog(jFrame, "O Saque foi concluído!", 
+                            "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+                    modeloContaCorrente.atualizarTabela(listaManipulaContaCorrente);
+                }
+            }
+            
+            if (tabelaManipularConta.getModel() == modeloContaInvestimento) {
+                ContaInvestimento conta = modeloContaInvestimento.getContaInvestimento(linhaClicada);
+                resultadoSaque = conta.saca(saque);
+                
+                if (resultadoSaque) {
+                    JOptionPane.showMessageDialog(jFrame, "O Saque foi concluído!", 
+                            "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+                    modeloContaInvestimento.atualizarTabela(listaManipulaContaInvestimento);
+                }
+            }
+        } catch(NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(jFrame, "O Saque deve ser numérico!", 
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+     /*
+    *** DEPOSITAR
+    */
+      private void DepositaMouseClicked(java.awt.event.MouseEvent evt) {
+        saldoAtual.setVisible(false);
+        verSaldo.setVisible(false);
+        
+        try {
+            double deposito = Double.parseDouble(tDeposito.getText());
+            boolean resultadoDeposito;
+            
+            if (tabelaManipularConta.getModel() == modeloContaCorrente) {
+                ContaCorrente conta = modeloContaCorrente.getContaCorrente(linhaClicada);
+                resultadoDeposito = conta.deposita(deposito);
+                
+                if (resultadoDeposito) {
+                    JOptionPane.showMessageDialog(jFrame, "O Depósito foi concluído!", 
+                            "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+                    modeloContaCorrente.atualizarTabela(listaManipulaContaCorrente);
+                }
+            }
+            
+            if (tabelaManipularConta.getModel() == modeloContaInvestimento) {
+                ContaInvestimento conta = modeloContaInvestimento.getContaInvestimento(linhaClicada);
+                resultadoDeposito = conta.deposita(deposito);
+                
+                if (resultadoDeposito) {
+                    JOptionPane.showMessageDialog(jFrame, "O Depósito foi concluído!", 
+                            "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+                    modeloContaInvestimento.atualizarTabela(listaManipulaContaInvestimento);
+                }
+            }
+        } catch(NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(jFrame, "O Depósito deve ser numérico!", 
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
+     /*
+    *** VER SALDO
+    */
+    private void VeSaldoMouseClicked(java.awt.event.MouseEvent evt) {
+        saldoAtual.setVisible(true);
+        verSaldo.setVisible(true);
+        
+        if (tabelaManipularConta.getModel() == modeloContaCorrente) {
+            ContaCorrente conta = modeloContaCorrente.getContaCorrente(linhaClicada);
+            String saldoDaConta = Double.toString(conta.getSaldo());
+
+            verSaldo.setText("R$" + saldoDaConta);
+        }
+            
+        if (tabelaManipularConta.getModel() == modeloContaInvestimento) {
+            ContaInvestimento conta = modeloContaInvestimento.getContaInvestimento(linhaClicada);
+            String saldoDaConta = Double.toString(conta.getSaldo());
+
+            verSaldo.setText("R$" + saldoDaConta);
+        }
+    }
+    
+     /*
+    *** REMUNERAR
+    */
+    
+     private void RemuneraMouseClicked(java.awt.event.MouseEvent evt) {
+        saldoAtual.setVisible(false);
+        verSaldo.setVisible(false);
+        
+        if (tabelaManipularConta.getModel() == modeloContaCorrente) {
+            ContaCorrente conta = modeloContaCorrente.getContaCorrente(linhaClicada);
+            conta.remunera();
+            modeloContaCorrente.atualizarTabela(listaManipulaContaCorrente);
+        }
+            
+        if (tabelaManipularConta.getModel() == modeloContaInvestimento) {
+            ContaInvestimento conta = modeloContaInvestimento.getContaInvestimento(linhaClicada);
+            conta.remunera();
+            modeloContaInvestimento.atualizarTabela(listaManipulaContaInvestimento);
+        }
+        
+        JOptionPane.showMessageDialog(jFrame, "A remuneração foi concluída!", 
+                            "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+    }
+        
+    
     /**
      * @param args the command line arguments
      */
@@ -250,4 +412,6 @@ public class ManipularContaView extends javax.swing.JFrame {
     private javax.swing.JTable tabelaManipularConta;
     private javax.swing.JLabel verSaldo;
     // End of variables declaration//GEN-END:variables
+
+   
 }
