@@ -53,7 +53,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="scroll1" alignment="0" pref="628" max="32767" attributes="0"/>
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
@@ -73,7 +73,10 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="label3VincularConta" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="tLabel3VincularConta" min="-2" pref="357" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="tLabel4VincularConta" min="-2" pref="357" max="-2" attributes="0"/>
+                                      <Component id="tLabel3VincularConta" min="-2" pref="357" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
@@ -84,13 +87,20 @@
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="selecioneCliente" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="selecioneCliente" min="-2" max="-2" attributes="0"/>
                               <Component id="incluirConta" alignment="0" min="-2" pref="52" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
+              </Group>
+              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                      <Component id="label4VincularConta" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="608" max="32767" attributes="0"/>
+                  </Group>
               </Group>
           </Group>
         </DimensionLayout>
@@ -129,9 +139,18 @@
                       <Component id="label3VincularConta" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="tLabel3VincularConta" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                  <EmptySpace pref="18" max="32767" attributes="0"/>
+                  <Component id="tLabel4VincularConta" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   <Component id="incluirConta" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="66" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+              </Group>
+              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace pref="385" max="32767" attributes="0"/>
+                      <Component id="label4VincularConta" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="123" max="-2" attributes="0"/>
+                  </Group>
               </Group>
           </Group>
         </DimensionLayout>
@@ -152,6 +171,10 @@
                   <Connection code="modelo" type="code"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tabelaVincularContaMouseClicked"/>
+                <EventHandler event="componentShown" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="tabelaVincularContaComponentShown"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -170,6 +193,9 @@
               </StringArray>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cbContasItemStateChanged"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
@@ -185,6 +211,10 @@
         <Component class="javax.swing.JLabel" name="label3VincularConta">
         </Component>
         <Component class="javax.swing.JTextField" name="tLabel3VincularConta">
+        </Component>
+        <Component class="javax.swing.JLabel" name="label4VincularConta">
+        </Component>
+        <Component class="javax.swing.JTextField" name="tLabel4VincularConta">
         </Component>
         <Component class="java.awt.Button" name="incluirConta">
           <Properties>

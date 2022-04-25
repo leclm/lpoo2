@@ -10,7 +10,7 @@ CREATE TABLE cliente(
     salario DOUBLE NOT NULL,
     endereco VARCHAR(100) NOT NULL,
     PRIMARY KEY (id)
-);  
+);
 
 CREATE TABLE conta(
     numeroConta INT NOT NULL UNIQUE AUTO_INCREMENT,

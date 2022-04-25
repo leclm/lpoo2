@@ -18,7 +18,7 @@ public class ContaDao {
     /*
     *** CONSTRUTOR
     */
-    private ContaDao() {}
+    public ContaDao() {}
     
     
     /*

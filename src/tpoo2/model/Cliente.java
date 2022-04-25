@@ -11,7 +11,7 @@ public final class Cliente implements Comparable {
     private String CPF;
     private double salario;
     private String endereco;
-    
+    private Conta conta = null;
     
     /*
     *** CONSTRUTOR
@@ -32,18 +32,18 @@ public final class Cliente implements Comparable {
     /*
     *** ID
     */
-    public void setId(int id){
+    public void setId(int id) {
         this.id = id;
     }
     
-    public int getId(){ return this.id; }
+    public int getId() { return this.id; }
     
     
     /*
     *** NOME
     */
-    public void setNome(String nome){
-        if (nome != null && !nome.equals("") && containsOnlyLetter(nome)){
+    public void setNome(String nome) {
+        if (nome != null && !nome.equals("") && containsOnlyLetter(nome)) {
             this.nome = nome;
             
         } else {
@@ -56,14 +56,14 @@ public final class Cliente implements Comparable {
         }
     }
     
-    public String getNome(){ return this.nome; }
+    public String getNome() { return this.nome; }
     
     
     /*
     *** SOBRENOME
     */
-    public void setSobrenome(String sobrenome){
-        if (sobrenome != null && !sobrenome.equals("") && containsOnlyLetter(sobrenome)){
+    public void setSobrenome(String sobrenome) {
+        if (sobrenome != null && !sobrenome.equals("") && containsOnlyLetter(sobrenome)) {
             this.sobrenome = sobrenome;
             
         } else {
@@ -76,14 +76,14 @@ public final class Cliente implements Comparable {
         }
     }
     
-    public String getSobrenome(){ return this.sobrenome; }
+    public String getSobrenome() { return this.sobrenome; }
     
     
     /*
     *** RG
     */
-    public void setRG(String RG){
-        if (RG != null && !RG.equals("") && containsOnlyNumber(RG)){
+    public void setRG(String RG) {
+        if (RG != null && !RG.equals("") && containsOnlyNumber(RG)) {
             this.RG = RG;
             
         } else {
@@ -96,14 +96,14 @@ public final class Cliente implements Comparable {
         }
     }
     
-    public String getRG(){ return this.RG; }
+    public String getRG() { return this.RG; }
     
     
     /*
     *** CPF
     */
-    public void setCPF(String CPF){
-        if (CPF != null && !CPF.equals("") && containsOnlyNumber(CPF)){
+    public void setCPF(String CPF) {
+        if (CPF != null && !CPF.equals("") && containsOnlyNumber(CPF)) {
             this.CPF = CPF;
             
         } else {
@@ -116,14 +116,14 @@ public final class Cliente implements Comparable {
         }
     }
     
-    public String getCPF(){ return this.CPF; }
+    public String getCPF() { return this.CPF; }
     
     
     /*
     *** SALÁRIO
     */
     public void setSalario(double salario) { 
-        if (salario > 0){
+        if (salario > 0) {
             this.salario = salario;
             
         } else {
@@ -142,8 +142,8 @@ public final class Cliente implements Comparable {
     /*
     *** ENDEREÇO
     */
-    public void setEndereco(String endereco){
-        if (endereco != null && !endereco.equals("")){
+    public void setEndereco(String endereco) {
+        if (endereco != null && !endereco.equals("")) {
             this.endereco = endereco;
             
         } else {
@@ -156,7 +156,23 @@ public final class Cliente implements Comparable {
         }
     }
     
-    public String getEndereco(){ return this.endereco; }
+    public String getEndereco() { return this.endereco; }
+    
+    
+    /*
+    *** CONTA
+    */
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
+    
+    public Conta getConta() { 
+        if (this.conta != null) {
+            return this.conta;
+        } else {
+            return null;
+        }
+    }
     
     
     /*

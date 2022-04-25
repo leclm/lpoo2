@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import tpoo2.controller.ClienteController;
+import tpoo2.controller.CadastrarClienteController;
 import tpoo2.controller.ManipularContaController;
 import tpoo2.model.Cliente;
 import tpoo2.model.ContaCorrente;
@@ -23,12 +23,7 @@ public class ManipularContaView extends javax.swing.JFrame {
     private final List<Cliente> listaDeClientes = new ArrayList();
     private final List<ContaCorrente> listaDeContasCorrente = new ArrayList();    
     private final List<ContaInvestimento> listaDeContasInvestimento = new ArrayList();
-
-
-
-
-
-
+    
 
     private int linhaClicada = -1;
     private int linhaClicadaVincularConta = -1;
@@ -240,10 +235,10 @@ public class ManipularContaView extends javax.swing.JFrame {
     *** CONTROLLER
     */
     public void setController(ManipularContaController controller) {
-        Sacar.addActionListener(e -> controller.saca());
-        Depositar.addActionListener(e -> controller.deposita());
-        VerSaldo.addActionListener(e -> controller.veSaldo());
-        Remunerar.addActionListener(e -> controller.remunera());
+        Sacar.addActionListener(e -> controller.Saca());
+        Depositar.addActionListener(e -> controller.Deposita());
+        VerSaldo.addActionListener(e -> controller.VeSaldo());
+        Remunerar.addActionListener(e -> controller.Remunera());
     }
     
     private void visualizarComponentesManipularConta(boolean visibilidade) {
@@ -268,7 +263,7 @@ public class ManipularContaView extends javax.swing.JFrame {
         verSaldo.setVisible(false);
     }
     
-     private void InformarMouseClicked(java.awt.event.MouseEvent evt) {
+    private void InformarMouseClicked(java.awt.event.MouseEvent evt) {
         try {
             Long cpf = Long.parseLong(tInformarCPF.getText());
             

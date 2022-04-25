@@ -7,7 +7,7 @@ import tpoo2.dao.ClienteDao;
 import tpoo2.model.Cliente;
 import tpoo2.view.CadastrarClienteView;
 
-public class ClienteController {
+public class CadastrarClienteController {
     private CadastrarClienteView view;
     private ClienteDao clienteDao;
     
@@ -15,7 +15,7 @@ public class ClienteController {
     /*
     *** CONSTRUTOR
     */
-    public ClienteController(CadastrarClienteView view, ClienteDao clienteDao) {
+    public CadastrarClienteController(CadastrarClienteView view, ClienteDao clienteDao) {
         this.view = view;
         this.clienteDao = clienteDao;
         initController();

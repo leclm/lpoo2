@@ -5,7 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import tpoo2.controller.ClienteController;
+import tpoo2.controller.CadastrarClienteController;
+import tpoo2.controller.ManipularContaController;
+import tpoo2.controller.VincularContaController;
+import tpoo2.dao.ContaDao;
 import tpoo2.model.Cliente;
 
 public class CadastrarClienteView extends javax.swing.JFrame {
@@ -140,11 +143,21 @@ public class CadastrarClienteView extends javax.swing.JFrame {
         bVincularConta.setBorder(null);
         bVincularConta.setMaximumSize(new java.awt.Dimension(92, 20));
         bVincularConta.setMinimumSize(new java.awt.Dimension(92, 20));
+        bVincularConta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bVincularContaMouseClicked(evt);
+            }
+        });
 
         bManipularConta.setBackground(new java.awt.Color(224, 168, 0));
         bManipularConta.setForeground(new java.awt.Color(0, 0, 0));
         bManipularConta.setText("Manipular Conta");
         bManipularConta.setBorder(null);
+        bManipularConta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bManipularContaMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout tabCadastrarClienteLayout = new javax.swing.GroupLayout(tabCadastrarCliente);
         tabCadastrarCliente.setLayout(tabCadastrarClienteLayout);
@@ -281,7 +294,7 @@ public class CadastrarClienteView extends javax.swing.JFrame {
     /*
     *** CONTROLLER
     */
-    public void setController(ClienteController controller) {
+    public void setController(CadastrarClienteController controller) {
         incluir.addActionListener(e -> controller.InsertCliente());
         excluir.addActionListener(e -> controller.DeleteCliente());
         alterar.addActionListener(e -> controller.UpdateCliente());
@@ -491,6 +504,28 @@ public class CadastrarClienteView extends javax.swing.JFrame {
     private void tListarPorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tListarPorKeyReleased
         usarListarPor();
     }//GEN-LAST:event_tListarPorKeyReleased
+
+    
+    /*
+    *** ALTERAR VIEW
+    */
+    private void bVincularContaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bVincularContaMouseClicked
+        VincularContaView vincularConta = new VincularContaView();
+        ContaDao contaDao = new ContaDao();
+        VincularContaController controller = new VincularContaController(vincularConta, contaDao);
+        
+        vincularConta.initView();
+        this.setVisible(false);
+    }//GEN-LAST:event_bVincularContaMouseClicked
+
+    private void bManipularContaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bManipularContaMouseClicked
+        ManipularContaView manipularConta = new ManipularContaView();
+        ContaDao contaDao = new ContaDao();
+        ManipularContaController controller = new ManipularContaController(manipularConta, contaDao);
+        
+        manipularConta.initView();
+        this.setVisible(false);
+    }//GEN-LAST:event_bManipularContaMouseClicked
     
     
     /**

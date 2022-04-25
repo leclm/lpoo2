@@ -17,7 +17,7 @@ public abstract class Conta implements ContaInterface{
     /*
     *** CONSTRUTOR
     */
-    public Conta( Cliente dono, double valor, int tipo) {
+    public Conta(Cliente dono, double valor, int tipo) {
         this.setDono(dono);
         this.setValorInicial(valor);
         this.setTipoConta(tipo);
