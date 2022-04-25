@@ -282,9 +282,6 @@
             </Property>
             <Property name="label" type="java.lang.String" value="Listar"/>
           </Properties>
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="listarMouseClicked"/>
-          </Events>
         </Component>
         <Component class="java.awt.Button" name="limpar">
           <Properties>

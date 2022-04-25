@@ -1,10 +1,12 @@
 package tpoo2.view;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.swing.JFrame;
+import tpoo2.controller.CadastrarClienteController;
+import tpoo2.controller.ManipularContaController;
 import tpoo2.controller.VincularContaController;
+import tpoo2.dao.ClienteDao;
+import tpoo2.dao.ContaDao;
 import tpoo2.model.Cliente;
 import tpoo2.model.Conta;
 import tpoo2.model.ContaCorrente;
@@ -14,17 +16,6 @@ public class VincularContaView extends javax.swing.JFrame {
     private final ModeloTabelaCliente modelo = new ModeloTabelaCliente();
     
     private int linhaClicadaVincularConta = -1;
-    
-    private int numeroContadorCorrente = 1;
-    private int numeroContadorInvestimento = 1;
-    
-    private final List<ContaCorrente> listaDeContasCorrente = new ArrayList();
-    private final List<ContaInvestimento> listaDeContasInvestimento = new ArrayList();
-    
-    JFrame jFrame = new JFrame();
-    /**
-     * Creates new form NovoJFrame2
-     */
     
     /*
     *** CONSTRUTOR
@@ -58,10 +49,20 @@ public class VincularContaView extends javax.swing.JFrame {
         label4VincularConta = new javax.swing.JLabel();
         tLabel4VincularConta = new javax.swing.JTextField();
         incluirConta = new java.awt.Button();
-        bVincularConta = new javax.swing.JButton();
+        bCadastrarCliente = new javax.swing.JButton();
         bManipularConta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        tabVincularConta.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                tabVincularContaAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
 
         selecioneCliente.setText("Selecione um cliente:");
 
@@ -69,11 +70,6 @@ public class VincularContaView extends javax.swing.JFrame {
         tabelaVincularConta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tabelaVincularContaMouseClicked(evt);
-            }
-        });
-        tabelaVincularConta.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                tabelaVincularContaComponentShown(evt);
             }
         });
         scroll1.setViewportView(tabelaVincularConta);
@@ -91,18 +87,28 @@ public class VincularContaView extends javax.swing.JFrame {
         incluirConta.setForeground(new java.awt.Color(240, 240, 240));
         incluirConta.setLabel("Incluir");
 
-        bVincularConta.setBackground(new java.awt.Color(33, 136, 56));
-        bVincularConta.setForeground(new java.awt.Color(240, 240, 240));
-        bVincularConta.setText("Cadastrar Cliente");
-        bVincularConta.setAutoscrolls(true);
-        bVincularConta.setBorder(null);
-        bVincularConta.setMaximumSize(new java.awt.Dimension(92, 20));
-        bVincularConta.setMinimumSize(new java.awt.Dimension(92, 20));
+        bCadastrarCliente.setBackground(new java.awt.Color(33, 136, 56));
+        bCadastrarCliente.setForeground(new java.awt.Color(240, 240, 240));
+        bCadastrarCliente.setText("Cadastrar Cliente");
+        bCadastrarCliente.setAutoscrolls(true);
+        bCadastrarCliente.setBorder(null);
+        bCadastrarCliente.setMaximumSize(new java.awt.Dimension(92, 20));
+        bCadastrarCliente.setMinimumSize(new java.awt.Dimension(92, 20));
+        bCadastrarCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bCadastrarClienteMouseClicked(evt);
+            }
+        });
 
         bManipularConta.setBackground(new java.awt.Color(224, 168, 0));
         bManipularConta.setForeground(new java.awt.Color(0, 0, 0));
         bManipularConta.setText("Manipular Conta");
         bManipularConta.setBorder(null);
+        bManipularConta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bManipularContaMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout tabVincularContaLayout = new javax.swing.GroupLayout(tabVincularConta);
         tabVincularConta.setLayout(tabVincularContaLayout);
@@ -133,7 +139,7 @@ public class VincularContaView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(tabVincularContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(bManipularConta, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bVincularConta, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(bCadastrarCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(tabVincularContaLayout.createSequentialGroup()
                         .addGroup(tabVincularContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(selecioneCliente)
@@ -164,7 +170,7 @@ public class VincularContaView extends javax.swing.JFrame {
                             .addComponent(label1VincularConta)
                             .addComponent(tLabel1VincularConta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(tabVincularContaLayout.createSequentialGroup()
-                        .addComponent(bVincularConta, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bCadastrarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(bManipularConta, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
@@ -262,7 +268,7 @@ public class VincularContaView extends javax.swing.JFrame {
         int verificarConta;
                 
         if (cliente.getConta() != null) {
-            verificarConta = cliente.getConta().getTipoConta();
+            verificarConta = cliente.getConta().get(0).getTipoConta();
         } else {
             verificarConta = 0;
         }
@@ -277,10 +283,11 @@ public class VincularContaView extends javax.swing.JFrame {
             case 2:
                 cbContas.addItem("Conta Investimento");
                 break;
-            default:
+            case 0:
                 cbContas.addItem("Conta Corrente");
                 cbContas.addItem("Conta Investimento");
                 break;
+            default: break;
         }
         
         selecioneTipoConta.setVisible(true);
@@ -328,14 +335,7 @@ public class VincularContaView extends javax.swing.JFrame {
             tabVincularConta.repaint();
         }
     }//GEN-LAST:event_cbContasItemStateChanged
-    
-    private void tabelaVincularContaComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabelaVincularContaComponentShown
-        List<Cliente> listaDeClientes = modelo.getClientes();
-        
-        Collections.sort(listaDeClientes, (o1, o2) -> Integer.toString(o1.getId()).compareTo(Integer.toString(o2.getId())));
-        modelo.atualizarTabela(listaDeClientes);
-    }//GEN-LAST:event_tabelaVincularContaComponentShown
-                                  
+
     
     /*
     *** INSERIR    
@@ -365,6 +365,42 @@ public class VincularContaView extends javax.swing.JFrame {
                 return new ContaInvestimento(donoInvestimento, valorInvestimento, saqueMinimo, depositoMinimo, montanteMinimo);
             default: return null;
         }
+    }
+    
+    
+    /*
+    *** ALTERAR VIEW
+    */
+    private void bCadastrarClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bCadastrarClienteMouseClicked
+        CadastrarClienteView cadastrarCliente = new CadastrarClienteView();
+        ClienteDao clienteDao = new ClienteDao();
+        CadastrarClienteController controller = new CadastrarClienteController(cadastrarCliente, clienteDao);
+        
+        cadastrarCliente.initView();
+        this.setVisible(false);
+    }//GEN-LAST:event_bCadastrarClienteMouseClicked
+
+    private void bManipularContaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bManipularContaMouseClicked
+        ManipularContaView manipularConta = new ManipularContaView();
+        ContaDao contaDao = new ContaDao();
+        ManipularContaController controller = new ManipularContaController(manipularConta, contaDao);
+        
+        manipularConta.initView();
+        this.setVisible(false);
+    }//GEN-LAST:event_bManipularContaMouseClicked
+
+    /*
+    *** LISTAR
+    */
+    private void tabVincularContaAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tabVincularContaAncestorAdded
+        ContaDao contaDao = new ContaDao();
+        VincularContaController vincularConta = new VincularContaController(this, contaDao);
+        vincularConta.getClientes();
+    }//GEN-LAST:event_tabVincularContaAncestorAdded
+                                     
+    public void listarClienteView(List<Cliente> clientes) {
+        Collections.sort(clientes, (o1, o2) -> Integer.toString(o1.getId()).compareTo(Integer.toString(o2.getId())));
+        modelo.atualizarTabela(clientes);
     }
     
     
@@ -405,8 +441,8 @@ public class VincularContaView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bCadastrarCliente;
     private javax.swing.JButton bManipularConta;
-    private javax.swing.JButton bVincularConta;
     private javax.swing.JComboBox<String> cbContas;
     private java.awt.Button incluirConta;
     private javax.swing.JLabel label1VincularConta;

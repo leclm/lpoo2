@@ -1,5 +1,6 @@
 package tpoo2.model;
 
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -11,7 +12,7 @@ public final class Cliente implements Comparable {
     private String CPF;
     private double salario;
     private String endereco;
-    private Conta conta = null;
+    private List<Conta> contas = null;
     
     /*
     *** CONSTRUTOR
@@ -162,13 +163,17 @@ public final class Cliente implements Comparable {
     /*
     *** CONTA
     */
-    public void setConta(Conta conta) {
-        this.conta = conta;
+    public void setContas(List<Conta> contas) {
+        this.contas = contas;
     }
     
-    public Conta getConta() { 
-        if (this.conta != null) {
-            return this.conta;
+    public void setConta(Conta conta) {
+        this.contas.add(conta);
+    }
+    
+    public List<Conta> getConta() {
+        if (this.contas != null) {
+            return this.contas;
         } else {
             return null;
         }

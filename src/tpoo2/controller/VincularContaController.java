@@ -12,7 +12,7 @@ import tpoo2.view.VincularContaView;
 public class VincularContaController {
     private VincularContaView view;
     private ContaDao contaDao;
-    private ClienteDao clienteDao;
+    private ClienteDao clienteDao = new ClienteDao();
     
     
     /*
@@ -33,6 +33,7 @@ public class VincularContaController {
         this.view.initView();
     }
     
+    
     /*
     *** INSERT
     */
@@ -40,13 +41,37 @@ public class VincularContaController {
         try {
             Conta conta = view.getContaFormulario();
             Cliente cliente = conta.getDono();
+            cliente.setConta(conta);
             
             contaDao.insertConta(conta);
-            clienteDao.insertContaCliente(cliente, conta);
             
         } catch(Exception ex) {
             JFrame jFrame = new JFrame();
             JOptionPane.showMessageDialog(jFrame, "Erro ao criar conta.\n"
+                    + ex.getMessage(),
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+            
+            throw new RuntimeException();
+        }
+    }
+    
+    /*
+    *** LISTAR
+    */
+    public void getClientes() {
+        try {
+            List<Cliente> clientes;
+            clientes = clienteDao.listClientes();
+            
+            for (Cliente cliente: clientes) {
+                cliente.setContas(contaDao.getContasByCpf(cliente.getCPF()));
+            }
+            
+            this.view.listarClienteView(clientes);
+            
+        } catch(Exception ex) {
+            JFrame jFrame = new JFrame();
+            JOptionPane.showMessageDialog(jFrame, "Erro ao listar clientes.\n"
                     + ex.getMessage(),
                     "Erro", JOptionPane.ERROR_MESSAGE);
             

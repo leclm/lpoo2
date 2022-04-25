@@ -48,6 +48,9 @@
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JPanel" name="tabVincularConta">
+      <Events>
+        <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="tabVincularContaAncestorAdded"/>
+      </Events>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -82,7 +85,7 @@
                           <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="bManipularConta" alignment="1" min="-2" pref="124" max="-2" attributes="0"/>
-                              <Component id="bVincularConta" alignment="1" min="-2" pref="124" max="-2" attributes="0"/>
+                              <Component id="bCadastrarCliente" alignment="1" min="-2" pref="124" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" attributes="0">
@@ -124,7 +127,7 @@
                           </Group>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="bVincularConta" min="-2" pref="28" max="-2" attributes="0"/>
+                          <Component id="bCadastrarCliente" min="-2" pref="28" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="bManipularConta" min="-2" pref="28" max="-2" attributes="0"/>
                       </Group>
@@ -173,7 +176,6 @@
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tabelaVincularContaMouseClicked"/>
-                <EventHandler event="componentShown" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="tabelaVincularContaComponentShown"/>
               </Events>
             </Component>
           </SubComponents>
@@ -227,7 +229,7 @@
             <Property name="label" type="java.lang.String" value="Incluir"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="bVincularConta">
+        <Component class="javax.swing.JButton" name="bCadastrarCliente">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="38" green="88" red="21" type="rgb"/>
@@ -247,6 +249,9 @@
               <Dimension value="[92, 20]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bCadastrarClienteMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="bManipularConta">
           <Properties>
@@ -261,6 +266,9 @@
               <Border info="null"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bManipularContaMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

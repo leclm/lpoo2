@@ -96,4 +96,23 @@ public class CadastrarClienteController {
             throw new RuntimeException();
         }
     }
+    
+    
+    /*
+    *** LISTAR
+    */
+    public void getClientes() {
+        try {
+            List<Cliente> clientes;
+            clientes = clienteDao.listClientes();
+            this.view.listarClienteView(clientes);
+            
+        } catch(Exception ex) {
+            JFrame jFrame = new JFrame();
+            JOptionPane.showMessageDialog(jFrame, "Erro ao recuperar clientes.",
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+            
+            throw new RuntimeException();
+        }
+    }
 }

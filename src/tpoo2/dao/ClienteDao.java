@@ -32,9 +32,6 @@ public class ClienteDao {
     */
     private static final String SQL_INSERT = "INSERT INTO cliente (cpf, nome, "
             + "sobrenome, rg, salario, endereco) VALUES (?,?,?,?,?,?);";
-    
-    private static final String SQL_ALTER_CLIENTE_CONTA = "ALTER TABLE cliente\n" +
-                        "ADD FOREIGN KEY (conta) REFERENCES conta(?);";
 
     private static final String SQL_UPDATE = "UPDATE cliente SET cpf = ?, "
             + "nome = ?, sobrenome = ?, rg = ?, salario = ?, endereco = ? WHERE id = ?; ";
@@ -80,27 +77,6 @@ public class ClienteDao {
             rs.next();
             int i = rs.getInt(1);
             c.setId(i);
-            
-        } catch(Exception ex) {
-            throw new RuntimeException(ex);
-            
-        } finally {
-            ConnectionFactory.close(con, st, rs); 
-        }
-    }
-    
-    public static void insertContaCliente(Cliente cliente, Conta conta) throws SQLException {
-        Connection con = connectionFactory.getConnection();
-        
-        try {
-            // prepared statement para inserção
-            st = con.prepareStatement(SQL_ALTER_CLIENTE_CONTA, Statement.RETURN_GENERATED_KEYS);
-            // seta os valores
-            st.setInt(1, conta.getNumero());
-            // executa
-            st.execute();
-            
-            cliente.setConta(conta);
             
         } catch(Exception ex) {
             throw new RuntimeException(ex);

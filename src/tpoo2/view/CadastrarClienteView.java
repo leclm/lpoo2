@@ -97,11 +97,6 @@ public class CadastrarClienteView extends javax.swing.JFrame {
         listar.setBackground(new java.awt.Color(0, 105, 217));
         listar.setForeground(new java.awt.Color(240, 240, 240));
         listar.setLabel("Listar");
-        listar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                listarMouseClicked(evt);
-            }
-        });
 
         limpar.setBackground(new java.awt.Color(19, 132, 150));
         limpar.setForeground(new java.awt.Color(240, 240, 240));
@@ -298,6 +293,7 @@ public class CadastrarClienteView extends javax.swing.JFrame {
         incluir.addActionListener(e -> controller.InsertCliente());
         excluir.addActionListener(e -> controller.DeleteCliente());
         alterar.addActionListener(e -> controller.UpdateCliente());
+        listar.addActionListener(e -> controller.getClientes());
     }
     
     
@@ -388,13 +384,11 @@ public class CadastrarClienteView extends javax.swing.JFrame {
     /*
     *** LISTAR
     */
-    private void listarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listarMouseClicked
-        List<Cliente> listaDeClientes = modelo.getClientes();
-        
-        Collections.sort(listaDeClientes, (o1, o2) -> Integer.toString(o1.getId()).compareTo(Integer.toString(o2.getId())));
+    public void listarClienteView(List<Cliente> clientes) {
+        Collections.sort(clientes, (o1, o2) -> Integer.toString(o1.getId()).compareTo(Integer.toString(o2.getId())));
         cbOrdenar.setSelectedItem("Selecione");
-        modelo.atualizarTabela(listaDeClientes);
-    }//GEN-LAST:event_listarMouseClicked
+        modelo.atualizarTabela(clientes);
+    }
     
     
     /*
