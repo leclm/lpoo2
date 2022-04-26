@@ -364,20 +364,16 @@ public class CadastrarClienteView extends javax.swing.JFrame {
     }//GEN-LAST:event_tabelaMouseClicked
 
     public Cliente getClienteParaAtualizar() {
-        return this.getClienteFormulario();
-    }
-    
-    public void alterarClienteView(Cliente cliente) {
-        if (linhaClicada != -1) {
-            modelo.fireTableRowsUpdated(linhaClicada, linhaClicada);
-        } else {
-            JFrame jFrame = new JFrame();
-            JOptionPane.showMessageDialog(jFrame, "Erro ao Alterar!\n"
-                    + "Nenhum cliente foi selecionado!", 
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-            
-            throw new RuntimeException();
-        }
+        Cliente cliente = modelo.getCliente(linhaClicada);
+        
+        String nome = tNome.getText();
+        String sobrenome = tSobrenome.getText();
+        String rg = tRG.getText();
+        String cpf = tCPF.getText();
+        double salario = Double.parseDouble(tSalario.getText());
+        String endereco = tEndereco.getText();
+
+        return new Cliente(cliente.getId(), nome, sobrenome, rg, cpf, salario, endereco);
     }
     
     

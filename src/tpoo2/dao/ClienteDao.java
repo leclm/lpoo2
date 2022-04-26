@@ -103,6 +103,9 @@ public class ClienteDao {
             st.setInt(7, c.getId());
             
             st.executeUpdate();
+        }  catch(Exception ex) {
+            throw new RuntimeException(ex);
+            
         } finally{
             st.close();
         }

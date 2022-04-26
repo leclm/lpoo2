@@ -87,11 +87,12 @@ public class CadastrarClienteController {
             }
             
             clienteDao.updateCliente(cliente);
-            view.alterarClienteView(cliente);
+            this.getClientes();
             
         } catch(Exception ex) {
             JFrame jFrame = new JFrame();
-            JOptionPane.showMessageDialog(jFrame, "Erro ao atualizar cliente.",
+            JOptionPane.showMessageDialog(jFrame, "Erro ao atualizar cliente.\n" 
+                    + ex.getMessage(),
                     "Erro", JOptionPane.ERROR_MESSAGE);
             
             throw new RuntimeException();
