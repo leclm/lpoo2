@@ -37,13 +37,14 @@ public class VincularContaController {
     /*
     *** INSERT
     */
-    public void InsertConta() {
+    public void IncluirConta() {
         try {
-            Conta conta = view.getContaFormulario();
+            Conta conta = this.view.getContaFormulario();
+            System.out.println(conta);
             Cliente cliente = conta.getDono();
             cliente.setConta(conta);
             
-            contaDao.insertConta(conta);
+            this.contaDao.insertConta(conta);
             
         } catch(Exception ex) {
             JFrame jFrame = new JFrame();
@@ -61,10 +62,10 @@ public class VincularContaController {
     public void getClientes() {
         try {
             List<Cliente> clientes;
-            clientes = clienteDao.listClientes();
+            clientes = this.clienteDao.listClientes();
             
             for (Cliente cliente: clientes) {
-                cliente.setContas(contaDao.getContasByCpf(cliente.getCPF()));
+                cliente.setContas(this.contaDao.getContasByCpf(cliente.getCPF()));
             }
             
             this.view.listarClienteView(clientes);

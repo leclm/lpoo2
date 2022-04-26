@@ -42,9 +42,14 @@ public class ContaDao {
     
     private static final String SQL_DELETE = "DELETE FROM conta WHERE numeroConta = ?";
     
+    private static final String SQL_ATUALIZAR_SALDO = "UPDATE conta SET "
+            + "saldoConta = ? WHERE cpf = ? AND numeroConta = ?;";
+    
     private static final String SQL_GET_CONTA_BY_CPF = "SELECT numeroConta, cpf, "
             + "saldoConta, limiteConta, saqueMinimo, depositoMinimo, tipoConta, montanteMinimo "
             + "FROM conta where cpf = ?;";
+    
+    private static final String SQL_GET_SALDO_CONTA = "SELECT saldoConta FROM conta WHERE cpf = ?;";
     
     
     /*
@@ -152,6 +157,57 @@ public class ContaDao {
     
     
     /*
+    *** ATUALIZAR SALDO
+    */
+    public static boolean atualizarSaldo(Conta conta) throws SQLException {
+        try{
+            con = ConnectionFactory.getConnection();
+            
+            st = con.prepareStatement(SQL_ATUALIZAR_SALDO);
+            st.setDouble(1, conta.getSaldo());
+            st.setString(2, conta.getDono().getCPF());
+            st.setInt(3, conta.getNumero());
+            
+            return st.executeUpdate() != 0;
+            
+        } catch (Exception ex) { 
+            return false; 
+            
+        } finally{ 
+            ConnectionFactory.close(con, st, rs); 
+        }
+    }
+    
+    
+    /*
+    *** RECUPERAR SALDO
+    */
+    public static double getSaldo(Conta conta) throws SQLException {
+        try{
+            con = ConnectionFactory.getConnection();
+            
+            st = con.prepareStatement(SQL_GET_SALDO_CONTA);
+            st.setString(1, conta.getDono().getCPF());
+            
+            rs = st.executeQuery();
+            
+            if(rs.next()) {
+                return rs.getDouble(1);
+            }
+            
+            return 0;
+            
+        } catch (Exception ex) { 
+            System.out.println(ex);
+            return 0; 
+            
+        } finally{ 
+            ConnectionFactory.close(con, st, rs); 
+        }
+    }
+    
+    
+    /*
     *** PROCURAR CONTA PELO CPF
     */
     public static List<Conta> getContasByCpf(String cpf) throws SQLException {
@@ -178,12 +234,14 @@ public class ContaDao {
                         
                         c.saca(Math.abs(rs.getDouble(3)));
                         
-                    } else c = new ContaCorrente (
-                        rs.getInt(1),
-                        dono, 
-                        rs.getDouble(3), 
-                        rs.getDouble(4)
-                    );
+                    } else { 
+                        c = new ContaCorrente (
+                            rs.getInt(1),
+                            dono, 
+                            rs.getDouble(3), 
+                            rs.getDouble(4)
+                        );
+                    }
                     
                 } else {
                     if (rs.getDouble(3) < 0) {
@@ -198,14 +256,16 @@ public class ContaDao {
                         
                         c.saca(Math.abs(rs.getDouble(3)));
                         
-                    } else c = new ContaInvestimento(
-                        rs.getInt(1),
-                        dono,
-                        0,
-                        rs.getDouble(5),
-                        rs.getDouble(6),
-                        rs.getDouble(7)
-                    );
+                    } else {
+                        c = new ContaInvestimento(
+                            rs.getInt(1),
+                            dono,
+                            rs.getDouble(3),
+                            rs.getDouble(5),
+                            rs.getDouble(6),
+                            rs.getDouble(8)
+                        );
+                    }
                 }
                 
                 contas.add(c);

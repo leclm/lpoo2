@@ -1,35 +1,21 @@
 package tpoo2.view;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import tpoo2.controller.CadastrarClienteController;
 import tpoo2.controller.ManipularContaController;
-import tpoo2.model.Cliente;
+import tpoo2.controller.VincularContaController;
+import tpoo2.dao.ClienteDao;
+import tpoo2.dao.ContaDao;
+import tpoo2.model.Conta;
 import tpoo2.model.ContaCorrente;
 import tpoo2.model.ContaInvestimento;
 
 public class ManipularContaView extends javax.swing.JFrame {
     private final ModeloTabelaConta modelo = new ModeloTabelaConta();
-    private final ModeloTabelaContaCorrente modeloContaCorrente = new ModeloTabelaContaCorrente();
-    private final ModeloTabelaContaInvestimento modeloContaInvestimento = new ModeloTabelaContaInvestimento();
-    private final ModeloTabelaCliente modeloVincularConta = new ModeloTabelaCliente();
-    
-    
-    private final List<ContaInvestimento> listaManipulaContaInvestimento = new ArrayList();
-    private final List<ContaCorrente> listaManipulaContaCorrente = new ArrayList();
-    private final List<Cliente> listaDeClientes = new ArrayList();
-    private final List<ContaCorrente> listaDeContasCorrente = new ArrayList();    
-    private final List<ContaInvestimento> listaDeContasInvestimento = new ArrayList();
-    
 
     private int linhaClicada = -1;
-    private int linhaClicadaVincularConta = -1;
-
-    
-     JFrame jFrame = new JFrame();
     
     /*
     *** CONSTRUTOR
@@ -65,7 +51,7 @@ public class ManipularContaView extends javax.swing.JFrame {
         saldoAtual = new javax.swing.JLabel();
         verSaldo = new javax.swing.JLabel();
         bVincularConta = new javax.swing.JButton();
-        bManipularConta = new javax.swing.JButton();
+        bCadastrarCliente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -76,6 +62,11 @@ public class ManipularContaView extends javax.swing.JFrame {
         Informar.setLabel("Informar");
 
         tabelaManipularConta.setModel(modelo);
+        tabelaManipularConta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaManipularContaMouseClicked(evt);
+            }
+        });
         scroll2.setViewportView(tabelaManipularConta);
 
         saque.setText("Saque:");
@@ -83,12 +74,22 @@ public class ManipularContaView extends javax.swing.JFrame {
         Sacar.setBackground(new java.awt.Color(33, 136, 56));
         Sacar.setForeground(new java.awt.Color(240, 240, 240));
         Sacar.setLabel("Sacar");
+        Sacar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SacarMouseClicked(evt);
+            }
+        });
 
         deposito.setText("Depósito:");
 
         Depositar.setBackground(new java.awt.Color(33, 136, 56));
         Depositar.setForeground(new java.awt.Color(240, 240, 240));
         Depositar.setLabel("Depositar");
+        Depositar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                DepositarMouseClicked(evt);
+            }
+        });
 
         VerSaldo.setBackground(new java.awt.Color(33, 136, 56));
         VerSaldo.setForeground(new java.awt.Color(240, 240, 240));
@@ -97,6 +98,11 @@ public class ManipularContaView extends javax.swing.JFrame {
         Remunerar.setBackground(new java.awt.Color(33, 136, 56));
         Remunerar.setForeground(new java.awt.Color(240, 240, 240));
         Remunerar.setLabel("Remunerar");
+        Remunerar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                RemunerarMouseClicked(evt);
+            }
+        });
 
         saldoAtual.setText("O saldo atual é:");
 
@@ -109,11 +115,21 @@ public class ManipularContaView extends javax.swing.JFrame {
         bVincularConta.setBorder(null);
         bVincularConta.setMaximumSize(new java.awt.Dimension(92, 20));
         bVincularConta.setMinimumSize(new java.awt.Dimension(92, 20));
+        bVincularConta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bVincularContaMouseClicked(evt);
+            }
+        });
 
-        bManipularConta.setBackground(new java.awt.Color(224, 168, 0));
-        bManipularConta.setForeground(new java.awt.Color(0, 0, 0));
-        bManipularConta.setText("Cadastrar Cliente");
-        bManipularConta.setBorder(null);
+        bCadastrarCliente.setBackground(new java.awt.Color(224, 168, 0));
+        bCadastrarCliente.setForeground(new java.awt.Color(0, 0, 0));
+        bCadastrarCliente.setText("Cadastrar Cliente");
+        bCadastrarCliente.setBorder(null);
+        bCadastrarCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bCadastrarClienteMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout tabManipularContaLayout = new javax.swing.GroupLayout(tabManipularConta);
         tabManipularConta.setLayout(tabManipularContaLayout);
@@ -152,7 +168,7 @@ public class ManipularContaView extends javax.swing.JFrame {
                                 .addComponent(Sacar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(tabManipularContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(bManipularConta, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(bCadastrarCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(bVincularConta, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(tabManipularContaLayout.createSequentialGroup()
                                 .addComponent(tDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -180,7 +196,7 @@ public class ManipularContaView extends javax.swing.JFrame {
                             .addComponent(tSaque)
                             .addComponent(saque))
                         .addComponent(Sacar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(bManipularConta, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(bCadastrarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16)
                 .addGroup(tabManipularContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(tabManipularContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -222,23 +238,12 @@ public class ManipularContaView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-     /*
+    /*
     *** INIT
     */
     public void initView() {
         java.awt.EventQueue.invokeLater(() -> this.setVisible(true));
-    }
-    
-    
-     /*
-    *** CONTROLLER
-    */
-    public void setController(ManipularContaController controller) {
-        Sacar.addActionListener(e -> controller.Saca());
-        Depositar.addActionListener(e -> controller.Deposita());
-        VerSaldo.addActionListener(e -> controller.VeSaldo());
-        Remunerar.addActionListener(e -> controller.Remunera());
+        visualizarComponentesManipularConta(false);
     }
     
     private void visualizarComponentesManipularConta(boolean visibilidade) {
@@ -254,15 +259,210 @@ public class ManipularContaView extends javax.swing.JFrame {
         
         VerSaldo.setVisible(visibilidade);
         Remunerar.setVisible(visibilidade);
+        saldoAtual.setVisible(visibilidade);
     }
     
+    
+     /*
+    *** CONTROLLER
+    */
+    public void setController(ManipularContaController controller) {
+        Informar.addActionListener(e -> controller.Informar());
+        VerSaldo.addActionListener(e -> controller.VerSaldo());
+    }
+    
+    
+    /*
+    *** INFORMAR
+    */
+    public String getCpfFormulario() {
+        String cpf = tInformarCPF.getText();
+        return cpf;
+    }
+    
+    public void AtualizarTabelaConta(List<Conta> contas) {
+        modelo.atualizarTabela(contas);
+    }
+    
+    
+    /*
+    *** ALTERAR VIEW
+    */
+    private void bVincularContaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bVincularContaMouseClicked
+        VincularContaView vincularConta = new VincularContaView();
+        ContaDao contaDao = new ContaDao();
+        VincularContaController controller = new VincularContaController(vincularConta, contaDao);
+        
+        vincularConta.initView();
+        this.setVisible(false);
+    }//GEN-LAST:event_bVincularContaMouseClicked
+
+    private void bCadastrarClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bCadastrarClienteMouseClicked
+        CadastrarClienteView cadastrarCliente = new CadastrarClienteView();
+        ClienteDao clienteDao = new ClienteDao();
+        CadastrarClienteController controller = new CadastrarClienteController(cadastrarCliente, clienteDao);
+        
+        cadastrarCliente.initView();
+        this.setVisible(false);
+    }//GEN-LAST:event_bCadastrarClienteMouseClicked
+
+    
+    /*
+    *** CLICAR NA TABELA
+    */
+    private void tabelaManipularContaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaManipularContaMouseClicked
+        //Pega a linha clicada
+        linhaClicada = tabelaManipularConta.rowAtPoint(evt.getPoint());
+        
+        visualizarComponentesManipularConta(true);
+        tabManipularConta.revalidate();
+        tabManipularConta.repaint();
+    }//GEN-LAST:event_tabelaManipularContaMouseClicked
+
+    public Conta getContaClicada() {
+        Conta conta = modelo.getConta(linhaClicada);
+        return conta;
+    }
+    
+    
+    /*
+    *** SACAR 
+    */
+    private void SacarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SacarMouseClicked
+        String texto = tSaque.getText();
+        
+        if(texto != null) {
+            try {
+                Conta conta = this.getContaClicada();
+                double valor = Double.parseDouble(texto);
+
+                if(conta.getTipoConta() == 1) {
+                    ContaCorrente cc = new ContaCorrente(conta.getNumero(), conta.getDono(), conta.getSaldo(), conta.getLimite());
+                    cc.saca(valor);
+
+                    conta = cc;
+                } else {
+                    ContaInvestimento ci = new ContaInvestimento(conta.getNumero(), conta.getDono(), 
+                            conta.getSaldo(), conta.getSaqueMinimo(), conta.getDepositoMinimo(), conta.getMontanteMinimo());
+                    ci.saca(valor);
+
+                    conta = ci;
+                }
+
+                ContaDao contaDao = new ContaDao();
+                ManipularContaController controller = new ManipularContaController(this, contaDao);
+                controller.AtualizarSaldo(conta);
+                
+            } catch(Exception ex) {
+                JFrame jFrame = new JFrame();
+                JOptionPane.showMessageDialog(jFrame, "Erro ao sacar.\n"
+                        + ex.getMessage(),
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+
+                throw new RuntimeException();
+            }
+        }
+    }//GEN-LAST:event_SacarMouseClicked
+
+    
+    /*
+    *** DEPOSITAR
+    */
+    private void DepositarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DepositarMouseClicked
+        String texto = tDeposito.getText();
+        
+        if(texto != null) {
+            try {
+                Conta conta = this.getContaClicada();
+                double valor = Double.parseDouble(texto);
+
+                if(conta.getTipoConta() == 1) {
+                    ContaCorrente cc = new ContaCorrente(conta.getNumero(), conta.getDono(), conta.getSaldo(), conta.getLimite());
+                    cc.deposita(valor);
+
+                    conta = cc;
+                } else {
+                    ContaInvestimento ci = new ContaInvestimento(conta.getNumero(), conta.getDono(), 
+                            conta.getSaldo(), conta.getSaqueMinimo(), conta.getDepositoMinimo(), conta.getMontanteMinimo());
+                    ci.deposita(valor);
+
+                    conta = ci;
+                }
+
+                ContaDao contaDao = new ContaDao();
+                ManipularContaController controller = new ManipularContaController(this, contaDao);
+                controller.AtualizarSaldo(conta);
+                
+            } catch(Exception ex) {
+                JFrame jFrame = new JFrame();
+                JOptionPane.showMessageDialog(jFrame, "Erro ao depositar.\n"
+                        + ex.getMessage(),
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+
+                throw new RuntimeException();
+            }
+        }
+    }//GEN-LAST:event_DepositarMouseClicked
+
+    
+    /*
+    *** REMUNERAR
+    */
+    private void RemunerarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RemunerarMouseClicked
+        try {
+            Conta conta = this.getContaClicada();
+
+            if(conta.getTipoConta() == 1) {
+                ContaCorrente cc = new ContaCorrente(conta.getNumero(), conta.getDono(), conta.getSaldo(), conta.getLimite());
+                cc.remunera();
+
+                conta = cc;
+            } else {
+                ContaInvestimento ci = new ContaInvestimento(conta.getNumero(), conta.getDono(), 
+                        conta.getSaldo(), conta.getSaqueMinimo(), conta.getDepositoMinimo(), conta.getMontanteMinimo());
+                ci.remunera();
+
+                conta = ci;
+            }
+
+            ContaDao contaDao = new ContaDao();
+            ManipularContaController controller = new ManipularContaController(this, contaDao);
+            controller.AtualizarSaldo(conta);
+                
+        } catch(Exception ex) {
+            JFrame jFrame = new JFrame();
+            JOptionPane.showMessageDialog(jFrame, "Erro ao remunerar.\n"
+                    + ex.getMessage(),
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+
+            throw new RuntimeException();
+        }
+    }//GEN-LAST:event_RemunerarMouseClicked
+
+    
+    /*
+    *** VER SALDO 
+    */
+    public void verSaldo(double saldo) {
+        String saldoTexto = Double.toString(saldo);
+
+        verSaldo.setText(saldoTexto);
+
+        tabManipularConta.revalidate();
+        tabManipularConta.repaint();
+    }
+        
+    
+    /*
     private void tabManipularContaComponentShown(java.awt.event.ComponentEvent evt) {
         visualizarComponentesManipularConta(false);
         tabelaManipularConta.setVisible(false);
         saldoAtual.setVisible(false);
         verSaldo.setVisible(false);
     }
+    */
     
+    /*
     private void InformarMouseClicked(java.awt.event.MouseEvent evt) {
         try {
             Long cpf = Long.parseLong(tInformarCPF.getText());
@@ -331,12 +531,13 @@ public class ManipularContaView extends javax.swing.JFrame {
         linhaClicada = tabelaManipularConta.rowAtPoint(evt.getPoint());
         visualizarComponentesManipularConta(true);
     }
-    
+    */
     
     
       /*
     *** SACAR
     */
+    /*
     public void SacarMouseClicked(java.awt.event.MouseEvent evt) {
         saldoAtual.setVisible(false);
         verSaldo.setVisible(false);
@@ -371,10 +572,12 @@ public class ManipularContaView extends javax.swing.JFrame {
                     "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    */
+    
      /*
     *** DEPOSITAR
     */
+    /*
     public void DepositarMouseClicked(java.awt.event.MouseEvent evt) {
         saldoAtual.setVisible(false);
         verSaldo.setVisible(false);
@@ -409,11 +612,12 @@ public class ManipularContaView extends javax.swing.JFrame {
                     "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+    */
     
      /*
     *** VER SALDO
     */
+    /*
     public void VerSaldoMouseClicked(java.awt.event.MouseEvent evt) {
         saldoAtual.setVisible(true);
         verSaldo.setVisible(true);
@@ -432,11 +636,12 @@ public class ManipularContaView extends javax.swing.JFrame {
             verSaldo.setText("R$" + saldoDaConta);
         }
     }
+    */
     
      /*
     *** REMUNERAR
     */
-    
+    /*
     public void RemunerarMouseClicked(java.awt.event.MouseEvent evt) {
         saldoAtual.setVisible(false);
         verSaldo.setVisible(false);
@@ -456,7 +661,7 @@ public class ManipularContaView extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(jFrame, "A remuneração foi concluída!", 
                             "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
     }
-        
+    */
     
     /**
      * @param args the command line arguments
@@ -500,7 +705,7 @@ public class ManipularContaView extends javax.swing.JFrame {
     private java.awt.Button Remunerar;
     private java.awt.Button Sacar;
     private java.awt.Button VerSaldo;
-    private javax.swing.JButton bManipularConta;
+    private javax.swing.JButton bCadastrarCliente;
     private javax.swing.JButton bVincularConta;
     private javax.swing.JLabel deposito;
     private javax.swing.JLabel informarCPF;

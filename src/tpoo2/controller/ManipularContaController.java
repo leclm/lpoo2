@@ -1,5 +1,6 @@
 package tpoo2.controller;
 
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import tpoo2.dao.ContaDao;
@@ -7,14 +8,16 @@ import tpoo2.model.Conta;
 import tpoo2.view.ManipularContaView;
 
 public class ManipularContaController {
-    private ManipularContaView manipularContaView;
+    private ManipularContaView view;
     private Conta conta;
+    private ContaDao contaDao;
+    
     
     /*
     *** CONSTRUTOR
     */
-    public ManipularContaController(ManipularContaView manipularContaView, ContaDao contaDao) {
-        this.manipularContaView = manipularContaView;
+    public ManipularContaController(ManipularContaView view, ContaDao contaDao) {
+        this.view = view;
         this.conta = conta;
         initController();
     }
@@ -24,77 +27,62 @@ public class ManipularContaController {
     *** INIT
     */
     private void initController(){
-        this.manipularContaView.setController(this);
-        this.manipularContaView.initView();
+        this.view.setController(this);
+        this.view.initView();
     }
     
     /*
-    *** SACAR
+    *** INFORMAR
     */
-    public void Saca() {
+    public void Informar() {
         try {
-            double valor = 0;
-            conta.saca(valor);
-            /*  manipularContaView.SacaMouseClicked();*/
+            String cpf = this.view.getCpfFormulario();
+            List<Conta> contas;
+
+            contas = this.contaDao.getContasByCpf(cpf);
+            this.view.AtualizarTabelaConta(contas);
             
         } catch(Exception ex) {
             JFrame jFrame = new JFrame();
-            JOptionPane.showMessageDialog(jFrame, "Erro ao sacar.\n"
+            JOptionPane.showMessageDialog(jFrame, "Erro ao recuperar contas.\n"
                     + ex.getMessage(),
                     "Erro", JOptionPane.ERROR_MESSAGE);
             
             throw new RuntimeException();
         }
     }
-
     
-     /*
-    *** DEPOSITAR
+    
+    /*
+    *** ATUALIZAR SALDO
     */
-    public void Deposita() {
-          try {
-              /*conta.deposita();
-              manipularContaView.DepositaMouseClicked(); */
-
-          } catch(Exception ex) {
-              JFrame jFrame = new JFrame();
-              JOptionPane.showMessageDialog(jFrame, "Erro ao depositar.\n"
-                      + ex.getMessage(),
-                      "Erro", JOptionPane.ERROR_MESSAGE);
-
-              throw new RuntimeException();
-          }
-      }
+    public void AtualizarSaldo(Conta conta) {
+        try {
+            this.contaDao.atualizarSaldo(conta);
+            
+        } catch(Exception ex) {
+            JFrame jFrame = new JFrame();
+            JOptionPane.showMessageDialog(jFrame, "Erro ao atualizar saldo.\n"
+                    + ex.getMessage(),
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+            
+            throw new RuntimeException();
+        }
+    }
     
     
-     /*
+    /*
     *** VER SALDO
     */
-    public void VeSaldo() {
+    public void VerSaldo() {
           try {
-              conta.getSaldo();
+              Conta conta = this.view.getContaClicada();
+              double saldo = this.contaDao.getSaldo(conta);
+              this.view.verSaldo(saldo);
               
           } catch(Exception ex) {
               JFrame jFrame = new JFrame();
               JOptionPane.showMessageDialog(jFrame, "Erro ao ver saldo.\n"
-                      + ex.getMessage(),
-                      "Erro", JOptionPane.ERROR_MESSAGE);
-
-              throw new RuntimeException();
-          }
-      }
-    
-     /*
-    *** REMUNERAR
-    */
-    public void Remunera() {
-          try {
-              conta.remunera();
-              /* manipularContaView.RemuneraMouseClicked();*/
-
-          } catch(Exception ex) {
-              JFrame jFrame = new JFrame();
-              JOptionPane.showMessageDialog(jFrame, "Erro ao remunerar.\n"
                       + ex.getMessage(),
                       "Erro", JOptionPane.ERROR_MESSAGE);
 

@@ -1,5 +1,6 @@
 package tpoo2.view;
 
+import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.List;
 import tpoo2.controller.CadastrarClienteController;
@@ -15,7 +16,7 @@ import tpoo2.model.ContaInvestimento;
 public class VincularContaView extends javax.swing.JFrame {
     private final ModeloTabelaCliente modelo = new ModeloTabelaCliente();
     
-    private int linhaClicadaVincularConta = -1;
+    private int linhaClicada = -1;
     
     /*
     *** CONSTRUTOR
@@ -46,21 +47,21 @@ public class VincularContaView extends javax.swing.JFrame {
         tLabel2VincularConta = new javax.swing.JTextField();
         label3VincularConta = new javax.swing.JLabel();
         tLabel3VincularConta = new javax.swing.JTextField();
-        label4VincularConta = new javax.swing.JLabel();
         tLabel4VincularConta = new javax.swing.JTextField();
         incluirConta = new java.awt.Button();
         bCadastrarCliente = new javax.swing.JButton();
         bManipularConta = new javax.swing.JButton();
+        label4VincularConta = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tabVincularConta.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 tabVincularContaAncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
 
@@ -146,11 +147,6 @@ public class VincularContaView extends javax.swing.JFrame {
                             .addComponent(incluirConta, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(tabVincularContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(tabVincularContaLayout.createSequentialGroup()
-                    .addGap(20, 20, 20)
-                    .addComponent(label4VincularConta)
-                    .addContainerGap(608, Short.MAX_VALUE)))
         );
         tabVincularContaLayout.setVerticalGroup(
             tabVincularContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,27 +182,28 @@ public class VincularContaView extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addComponent(incluirConta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22))
-            .addGroup(tabVincularContaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabVincularContaLayout.createSequentialGroup()
-                    .addContainerGap(385, Short.MAX_VALUE)
-                    .addComponent(label4VincularConta)
-                    .addGap(123, 123, 123)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 628, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(84, 84, 84)
+                .addComponent(label4VincularConta)
+                .addContainerGap(699, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addGap(0, 77, Short.MAX_VALUE)
                     .addComponent(tabVincularConta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGap(0, 78, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 508, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(421, Short.MAX_VALUE)
+                .addComponent(label4VincularConta, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(73, 73, 73))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -221,7 +218,11 @@ public class VincularContaView extends javax.swing.JFrame {
     *** CONTROLLER
     */
     public void setController(VincularContaController controller) {
-        incluirConta.addActionListener(e -> controller.InsertConta());
+        for (ActionListener al : incluirConta.getActionListeners()) {
+            incluirConta.removeActionListener(al);
+        }
+        
+        incluirConta.addActionListener(e -> controller.IncluirConta());
     }
     
     
@@ -255,20 +256,25 @@ public class VincularContaView extends javax.swing.JFrame {
         incluirConta.setVisible(false);
     }
     
+    
     /*
     *** CLICAR NA TABELA
     */
     private void tabelaVincularContaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaVincularContaMouseClicked
         //Pega a linha clicada
-        linhaClicadaVincularConta = tabelaVincularConta.rowAtPoint(evt.getPoint());
+        linhaClicada = tabelaVincularConta.rowAtPoint(evt.getPoint());
         
         //Pega o cliente da linha clicada
-        Cliente cliente = modelo.getCliente(linhaClicadaVincularConta);
+        Cliente cliente = modelo.getCliente(linhaClicada);
         
-        int verificarConta;
+        int verificarConta = 0;
                 
         if (cliente.getConta() != null) {
-            verificarConta = cliente.getConta().get(0).getTipoConta();
+            try {
+                verificarConta = cliente.getConta().get(0).getTipoConta();
+            } catch(IndexOutOfBoundsException ex) {
+                verificarConta = 0;
+            }
         } else {
             verificarConta = 0;
         }
@@ -306,10 +312,12 @@ public class VincularContaView extends javax.swing.JFrame {
                     label1VincularConta.setText("Depósito inicial (valor em R$):");
                     label2VincularConta.setText("Limite da conta (valor em R$):");
                     label3VincularConta.setText("");
+                    label4VincularConta.setText("");
 
                     tLabel1VincularConta.setVisible(true);
                     tLabel2VincularConta.setVisible(true);
                     tLabel3VincularConta.setVisible(false);
+                    tLabel4VincularConta.setVisible(false);
                     
                     incluirConta.setVisible(true);
 
@@ -338,11 +346,11 @@ public class VincularContaView extends javax.swing.JFrame {
 
     
     /*
-    *** INSERIR    
+    *** PEGAR CONTA DO FORMULÁRIO  
     */
     public Conta getContaFormulario() {
-       //Pega o cliente da linha clicada
-        Cliente cliente = modelo.getCliente(linhaClicadaVincularConta);
+        //Pega o cliente da linha clicada
+        Cliente cliente = modelo.getCliente(linhaClicada);
 
         //Pega qual tipo de conta foi escolhida
         String comboConta = cbContas.getSelectedItem().toString();
@@ -363,6 +371,7 @@ public class VincularContaView extends javax.swing.JFrame {
                 double saqueMinimo = Double.parseDouble(tLabel4VincularConta.getText());
                 
                 return new ContaInvestimento(donoInvestimento, valorInvestimento, saqueMinimo, depositoMinimo, montanteMinimo);
+            
             default: return null;
         }
     }
