@@ -348,7 +348,7 @@ public class VincularContaView extends javax.swing.JFrame {
     /*
     *** PEGAR CONTA DO FORMULÁRIO  
     */
-    public Conta getContaFormulario() {
+    public Conta getContaFormulario() { //RETORNA A CONTA PARA O CONTROLLER
         //Pega o cliente da linha clicada
         Cliente cliente = modelo.getCliente(linhaClicada);
 
@@ -398,9 +398,11 @@ public class VincularContaView extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_bManipularContaMouseClicked
 
+    
     /*
     *** LISTAR
     */
+    //LISTAR OS CLIENTES INSERIDOS NO BANCO DE DADOS
     private void tabVincularContaAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tabVincularContaAncestorAdded
         ContaDao contaDao = new ContaDao();
         VincularContaController vincularConta = new VincularContaController(this, contaDao);
