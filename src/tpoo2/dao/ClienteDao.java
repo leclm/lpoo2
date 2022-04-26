@@ -122,6 +122,8 @@ public class ClienteDao {
             for (int i = 0; i< contasCliente.size(); i++)
                 ContaDao.deleteConta(contasCliente.get(i).getNumero());
             
+            
+            
             st = con.prepareStatement(SQL_DELETE);
             st.setInt(1, id);
 
@@ -136,22 +138,8 @@ public class ClienteDao {
     }
     
     public void deleteLista(List<Cliente> clientes) throws SQLException {
-        for(Cliente Cliente: clientes){
-            deleteCliente(Cliente);
-        }
-    }
-
-    public void deleteCliente(Cliente cliente) throws SQLException {
-        Connection con = connectionFactory.getConnection();
-        PreparedStatement stmtExcluir;
-        stmtExcluir = con.prepareStatement(SQL_DELETE);
-        
-        try {
-            stmtExcluir.setLong(1, cliente.getId());
-            stmtExcluir.executeUpdate();
-            
-        } finally{
-            stmtExcluir.close();
+        for(Cliente cliente: clientes){
+            deleteClienteById(cliente.getId());
         }
     }
 

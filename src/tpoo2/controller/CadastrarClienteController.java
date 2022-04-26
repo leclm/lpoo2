@@ -62,7 +62,8 @@ public class CadastrarClienteController {
             
         } catch(Exception ex){
             JFrame jFrame = new JFrame();
-            JOptionPane.showMessageDialog(jFrame, "Erro ao excluir cliente.",
+            JOptionPane.showMessageDialog(jFrame, "Erro ao excluir cliente.\n" 
+                    + ex.getMessage(),
                     "Erro", JOptionPane.ERROR_MESSAGE);
             
             throw new RuntimeException();
